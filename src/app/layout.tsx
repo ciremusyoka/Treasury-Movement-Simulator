@@ -1,6 +1,9 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
+import NavBar from "./component/navBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,12 +25,22 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
+          <NavBar />
+          <main className="container mx-auto px-0 sm:px-6 lg:px-8 py-8">
+            {children}
+          </main>
+
+          <footer className="bg-gray-800 text-white text-center py-6 mt-12 rounded-t-lg shadow-inner">
+            <p>&copy; {new Date().getFullYear()} TreasuryFlow Simulator. All rights reserved.</p>
+          </footer>
+        </div>
       </body>
     </html>
   );
