@@ -3,6 +3,7 @@ import { fetchAccountList, formatCurrency, InitialAccounts, } from "../utills";
 import React, { useState, useMemo, useEffect, } from 'react';
 import { convert, rates } from "../utills/convertion";
 import axios from "axios";
+import { increment } from "firebase/firestore/lite";
 
 const base_url: string | undefined = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -37,6 +38,15 @@ const TransferForm = () => {
 
 
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setMessage({ type: '', text: '' });
+        }, 15000);
+
+        return () => clearTimeout(timer);
+    }, [message]);
+
+
 
 
     const availableSourceAccounts = useMemo(() => accounts.filter(acc => acc.id !== destinationAccount), [accounts, destinationAccount]);
@@ -57,11 +67,12 @@ const TransferForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setMessage({ type: '', text: '' });
 
         const srcAcc = accounts.find(acc => acc.id === sourceAccount);
         const destAcc = accounts.find(acc => acc.id === destinationAccount);
         const transferAmount = amount;
+
+
 
         if (!srcAcc || !destAcc) {
             setMessage({ type: 'error', text: 'Please select valid source and destination accounts.' });
@@ -73,7 +84,7 @@ const TransferForm = () => {
             return;
         }
 
-        if (srcAcc.available_balance < transferAmount) {
+        if (Number(srcAcc.available_balance) < transferAmount) {
             setMessage({ type: 'error', text: 'Insufficient balance in source account for direct transfer.' });
             return;
         }
@@ -90,7 +101,7 @@ const TransferForm = () => {
                 note,
                 transferDate
             });
-           
+
 
             setMessage({ type: 'success', text: 'Transfer successful!' });
             setSourceAccount('');
@@ -154,10 +165,10 @@ const TransferForm = () => {
                         onChange={(e) => setAmount(e.target.value as any)}
                         className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="e.g., 5000"
-                        min="0"
+                        min="1"
                         step="10"
                         max={srcAcc?.available_balance}
-                        required
+
                     />
                     {destAcc?.currency && srcAcc?.currency && destAcc.currency !== srcAcc.currency &&
                         <p className="text-green-500 text-xs">Conversion rate: 1 {srcAcc.currency} = {rates[srcAcc.currency][destAcc.currency]} {destAcc.currency}</p>
