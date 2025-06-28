@@ -166,7 +166,6 @@ const TransferForm = () => {
                         className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="e.g., 5000"
                         min="1"
-                        step="10"
                         max={srcAcc?.available_balance}
 
                     />
