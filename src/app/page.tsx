@@ -1,36 +1,36 @@
+'use client'
 
-import { fetchAccountList, formatCurrency, } from "../app/utills/index";
+import { fetchAccountList, formatCurrency, InitialAccounts, } from "../app/utills/index";
 import axios from "axios";
 import AccountSummaryModal from "./component/accountDetails";
-
-const base_url: string | undefined = process.env.BASE_URL
-async function AccountList() {
-  let error: string = '';
+import { useEffect, useState } from "react";
 
 
-  const fetchAccounts = async () => {
-    try {
+function AccountList() {
+  const [accounts, setAccounts] = useState<InitialAccounts[]>();
+  const [error, setError] = useState("");
 
-      console.log("base_url", base_url)
 
-      return await fetchAccountList(base_url);
-    } catch (err) {
-      console.log("error")
-      error = err
-      // if (axios.isAxiosError(err)) {
-      //   console.log('Unexpected error:', error);
-      //   error = "Internal server error"
-      // } else {
-      //   console.log('Unexpected error:', err);
-      //   error = "Internal server error"
-      // }
+  useEffect(() => {
+
+    const fetchAccounts = async () => {
+      try {
+
+        const data = await fetchAccountList('/');
+        setAccounts(data)
+      } catch (err: any) {
+
+        setError("Internal server error")
+      }
     }
+    fetchAccounts()
+  }, []);
 
-  }
-  const accounts = await fetchAccounts();
 
 
-  if (error) return <div>{JSON.stringify(error)}</div>;
+
+
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="bg-gradient-to-br from-blue-700 to-indigo-800 text-white p-6 rounded-lg shadow-xl mb-6">

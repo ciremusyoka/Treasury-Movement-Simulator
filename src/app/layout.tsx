@@ -33,7 +33,7 @@ export default function RootLayout({
       >
         <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
           <NavBar />
-          <main className="container mx-auto px-0 sm:px-6 lg:px-8 py-8">
+          <main className="container mx-auto px-0 sm:px-6 lg:px-8 py-8 min-h-[80vh]">
             {children}
           </main>
 
