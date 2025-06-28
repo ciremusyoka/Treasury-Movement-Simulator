@@ -1,7 +1,6 @@
 import { convert, rates } from "@/app/utills/convertion";
 import pool from "../../utills/db";
 import { randomUUID } from "crypto";
-import { jsonResponse } from "@/app/utills/response";
 import { isEmpty } from "@/app/utills";
 import { NextResponse } from "next/server";
 
@@ -99,16 +98,6 @@ export async function POST(req: any) {
 
         }
 
-
-
-        // Credit destination account
-
-
-
-
-
-        console.log("++++++++++++++++++++++++++222")
-
         const is_future_dated = transferDate ? true : false;
 
         //const future_date = transferDate ? transferDate : ;
@@ -132,7 +121,7 @@ export async function POST(req: any) {
                 converted_amount,
                 note,
                 is_future_dated,
-                transferDate
+                transferDate || null
             ]
         );
         await client.query('COMMIT');

@@ -1,6 +1,6 @@
 'use client';
 
-import { act, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatCurrency, InitialAccounts } from '../utills';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import axios from 'axios';
@@ -21,20 +21,14 @@ export default function AccountSummaryModal({
     account
 }: Props) {
     const [isOpen, setIsOpen] = useState(false);
-
     const [futureTransfers, setFutureTransfers] = useState<Transfer[]>([]);
 
     useEffect(() => {
-        console.log("::::::::::::::::::::::::::", isOpen, account?.future_total, Number(account.future_total) > 0);
         if (isOpen && (account?.future_total && Number(account.future_total) > 0)) {
-            ;
-            console.log(".........................");
-
 
             const fetchFutureTransfers = async () => {
                 try {
                     const res = await axios(`/api/futuretransfers?account_id=${account.id}`);
-
                     setFutureTransfers(res.data.data);
                 } catch (err) {
                     console.error('Error fetching future transfers:', err);

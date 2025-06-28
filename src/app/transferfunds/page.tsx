@@ -22,15 +22,11 @@ const TransferForm = () => {
             try {
 
                 const accountList = await fetchAccountList(base_url);
-                console.log(accountList);
-
                 setAccounts(accountList);
             } catch (error) {
                 if (axios.isAxiosError(error)) {
-                    console.log('Unexpected error:', error);
                     setError("Internal server error");
                 } else {
-                    console.log('Unexpected error:', error);
                     setError("Internal server error");
                 }
             }
@@ -85,7 +81,7 @@ const TransferForm = () => {
 
         try {
             const base_url = process.env.NEXT_PUBLIC_BASE_URL
-            const response = await axios.post(`${base_url}api/transferfunds`, {
+            await axios.post(`${base_url}api/transferfunds`, {
                 sourceAccountId: srcAcc.id,
                 destinationAccountId: destAcc.id,
                 amount,
@@ -94,19 +90,20 @@ const TransferForm = () => {
                 note,
                 transferDate
             });
-            console.log(response);
+           
 
             setMessage({ type: 'success', text: 'Transfer successful!' });
             setSourceAccount('');
             setDestinationAccount('');
             setAmount(null);
             setIsFutureDated(false);
+            setTransferDate("")
         } catch (error) {
             setMessage({ type: 'error', text: `Transfer failed: ${error.message}` });
         }
     };
 
-    //if (error) return <div>{error}</div>;
+    if (error) return <div>{error}</div>;
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-xl mb-6 border border-gray-200">
@@ -203,7 +200,7 @@ const TransferForm = () => {
                             value={transferDate}
                             onChange={(e) => setTransferDate(e.target.value)}
                             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2 border"
-                            min={new Date().toISOString().split('T')[0]} // Optional: restrict to future dates
+                            min={new Date().toISOString().slice(0, 16)}
                         />
                         {transferDate && new Date(transferDate) < new Date() && (
                             <p className="text-red-500 text-xs mt-1">Please enter a date from today or later</p>
