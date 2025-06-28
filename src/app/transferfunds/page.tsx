@@ -77,7 +77,7 @@ const TransferForm = () => {
             return;
         }
 
-        if (srcAcc.balance < transferAmount) {
+        if (srcAcc.available_balance < transferAmount) {
             setMessage({ type: 'error', text: 'Insufficient balance in source account for direct transfer.' });
             return;
         }
@@ -154,7 +154,7 @@ const TransferForm = () => {
                         type="number"
                         id="amount"
                         value={amount || ''}
-                        onChange={(e) => setAmount(e.target.value)}
+                        onChange={(e) => setAmount(e.target.value as any)}
                         className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="e.g., 5000"
                         min="0"

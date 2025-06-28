@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import pool from "../../utills/db";
 
 // Get all accounts
-export async function GET(res) {
+export async function GET(res: any) {
     const { searchParams } = new URL(res.url);
     const accountNumber = searchParams.get('account_id');
 

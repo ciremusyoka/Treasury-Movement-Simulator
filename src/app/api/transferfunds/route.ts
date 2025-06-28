@@ -13,7 +13,7 @@ export type TransferFunds = {
     destinationCurrency: string,
 }
 
-export async function POST(req) {
+export async function POST(req: any) {
 
     const body = await req.json();
 
@@ -61,14 +61,14 @@ export async function POST(req) {
             throw new Error('One or both accounts not found');
         }
 
-        const sourceAccount = res.rows.find(row => row.id === sourceAccountId)
+        const sourceAccount = res.rows.find((row: any) => row.id === sourceAccountId)
         if ((sourceAccount.available_balance - amount) < 1) {
             return NextResponse.json({ data: "Insufficient balance in source account for direct transfer" }, { status: 400 })
         }
 
 
         const converted_amount = convert(sourceCurrency, destinationCurrency, amount);
-        const fxRate = rates[sourceCurrency][destinationCurrency]
+        const fxRate = (rates as any)[sourceCurrency][destinationCurrency]
         // Debit source account
         if (transferDate) {
 

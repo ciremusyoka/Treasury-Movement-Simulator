@@ -11,22 +11,26 @@ async function AccountList() {
   const fetchAccounts = async () => {
     try {
 
+      console.log("base_url", base_url)
+
       return await fetchAccountList(base_url);
     } catch (err) {
-      if (axios.isAxiosError(err)) {
-        console.log('Unexpected error:', error);
-        error = "Internal server error"
-      } else {
-        console.log('Unexpected error:', err);
-        error = "Internal server error"
-      }
+      console.log("error")
+      error = err
+      // if (axios.isAxiosError(err)) {
+      //   console.log('Unexpected error:', error);
+      //   error = "Internal server error"
+      // } else {
+      //   console.log('Unexpected error:', err);
+      //   error = "Internal server error"
+      // }
     }
 
   }
   const accounts = await fetchAccounts();
 
 
-  if (error) return <div>{error}</div>;
+  if (error) return <div>{JSON.stringify(error)}</div>;
 
   return (
     <div className="bg-gradient-to-br from-blue-700 to-indigo-800 text-white p-6 rounded-lg shadow-xl mb-6">

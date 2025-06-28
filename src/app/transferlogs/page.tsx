@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ChevronDown, Filter, Calendar } from 'lucide-react';
-import {  fetchAccountList, formatCurrency } from "../utills";
+import { fetchAccountList, formatCurrency } from "../utills";
 import axios from 'axios';
 import { Filters } from './filters';
 
@@ -147,7 +147,7 @@ async function TransactionLog({
                             </tr>
                         )) : (
                             <tr>
-                                <td colSpan="6" className="px-6 py-4 text-center text-sm text-gray-500">No transactions found.</td>
+                                <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">No transactions found.</td>
                             </tr>
                         )}
                     </tbody>
