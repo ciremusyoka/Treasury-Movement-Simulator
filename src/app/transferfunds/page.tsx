@@ -3,7 +3,6 @@ import { fetchAccountList, formatCurrency, InitialAccounts, } from "../utills";
 import React, { useState, useMemo, useEffect, } from 'react';
 import { convert, rates } from "../utills/convertion";
 import axios from "axios";
-import { increment } from "firebase/firestore/lite";
 
 const base_url: string | undefined = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -45,8 +44,6 @@ const TransferForm = () => {
 
         return () => clearTimeout(timer);
     }, [message]);
-
-
 
 
     const availableSourceAccounts = useMemo(() => accounts.filter(acc => acc.id !== destinationAccount), [accounts, destinationAccount]);
@@ -192,7 +189,10 @@ const TransferForm = () => {
                         id="futureDated"
                         type="checkbox"
                         checked={isFutureDated}
-                        onChange={(e) => setIsFutureDated(e.target.checked)}
+                        onChange={(e) => {
+                            setIsFutureDated(e.target.checked)
+                            setTransferDate("");
+                        }}
                         className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     />
                     <label htmlFor="futureDated" className="ml-2 block text-sm text-gray-900">

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { formatCurrency, InitialAccounts } from '../utills';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import axios from 'axios';
+import LoadingSpinner from './loading';
 
 type Transfer = {
     id: string;
@@ -22,16 +23,20 @@ export default function AccountSummaryModal({
 }: Props) {
     const [isOpen, setIsOpen] = useState(false);
     const [futureTransfers, setFutureTransfers] = useState<Transfer[]>([]);
+    const [loading, setLoading] = useState<boolean>();
 
     useEffect(() => {
         if (isOpen && (account?.future_total && Number(account.future_total) > 0)) {
 
             const fetchFutureTransfers = async () => {
                 try {
+                    setLoading(true);
                     const res = await axios(`/api/futuretransfers?account_id=${account.id}`);
                     setFutureTransfers(res.data.data);
                 } catch (err) {
                     console.error('Error fetching future transfers:', err);
+                } finally {
+                    setLoading(false);
                 }
             };
 
@@ -69,22 +74,27 @@ export default function AccountSummaryModal({
                                             <th className="px-6 py-3">Amount</th>
                                         </tr>
                                     </thead>
-                                    {futureTransfers.length === 0 ? (
+                                    {loading ? (
+                                        <div className="flex justify-center items-center text-center">
+                                            <LoadingSpinner />
+                                        </div>
 
-                                        <p className="text-gray-500 text-sm py-4 pl-6 text-center">
-                                            No future transfers
-                                        </p>
                                     ) : (
-                                        <tbody className="text-gray-800 text-sm">
-                                            {futureTransfers?.length > 0 && futureTransfers.map(acct => (
-                                                <tr key={acct.id} className="border-t">
+                                        futureTransfers?.length > 0 ? (
+                                            futureTransfers.map(acct => (
+                                                <tr key={acct.id} className="border-t text-gray-500">
                                                     <td className="px-6 py-4">{new Date(acct.future_date).toLocaleString()}</td>
                                                     <td className="px-6 py-4">{acct.destination_account_id}</td>
-                                                    <td className="px-6 py-4">{formatCurrency(acct.amount, acct.destination_currency)}</td>
+                                                    <td className="px-6 py-4">
+                                                        {formatCurrency(acct.amount, acct.destination_currency)}
+                                                    </td>
                                                 </tr>
-                                            ))}
-
-                                        </tbody>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan={3} className="text-center py-4 text-gray-500">No future transfers</td>
+                                            </tr>
+                                        )
                                     )}
 
                                 </table>
